@@ -22,11 +22,12 @@ if ( $#distance == $#duration ) {
 	my $sum_duration=0;
 	$sum_distance+=$_ for @distance;
 	$sum_duration+=$_ for @duration;
-	if( $sum_duration > 0 ) {
-		my ($hour, $min, $sec)=( ($sum_duration/3600)%24, ($sum_duration/60)%60, $sum_duration%60 );
-		my $avg_speed=$sum_distance*3600/$sum_duration;
-		printf("total_distance=%.2f, total_duration=%2d:%2d:%2d, average_speed=%.2f\n", $sum_distance, $hour, $min, $sec, $avg_speed);
-	}
+	my ($hour, $min, $sec)=( ($sum_duration/3600)%24, ($sum_duration/60)%60, $sum_duration%60 );
+	my $avg_speed=$sum_duration==0?0:$sum_distance*3600/$sum_duration;
+	my $pace_seconds=$sum_distance==0?0:$sum_duration/$sum_distance;
+	my ($phour, $pmin, $psec)=( ($pace_seconds/3600)%24, ($pace_seconds/60)%60, $pace_seconds%60 );
+
+	printf("total_distance=%.2f, total_duration=%02d:%02d:%02d, average_speed=%.2fmph, average_pace=%02d:%02d/mi\n", $sum_distance, $hour, $min, $sec, $avg_speed, $pmin, $psec);
 } else {
 	print "Number of distance and duration parameters don't match.\n";
 	exit;
